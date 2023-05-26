@@ -1,26 +1,32 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      java: corretto-17
+    commands:
+      - echo Installing Maven...
+      - apt-get install -y maven
+
+  pre_build:
+    commands:
+      - echo Setting up AWS credentials...
+      - aws configure set aws_access_key_id YOUR_ACCESS_KEY
+      - aws configure set aws_secret_access_key YOUR_SECRET_ACCESS_KEY
+      - aws configure set default.region YOUR_REGION
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region YOUR_REGION | docker login --username AWS --password-stdin YOUR_ECR_REGISTRY_URL
+
   build:
     commands:
-      - echo Entered the build phase...
-      - mvn clean package
+      - echo Building the Spring Boot application...
+      - mvn clean install
 
   post_build:
     commands:
-      - echo Build completed successfully.
+      - echo Building Docker image...
+      - docker build -t YOUR_IMAGE_NAME .
 
 artifacts:
-  files:
-    - target/one-controller.jar
-  discard-paths: yes
-
-artifacts:
-  files:
-    - target/one-controller.jar
-  discard-paths: yes
-
-artifacts:
-  type: codepipeline
   files:
     - target/one-controller.jar

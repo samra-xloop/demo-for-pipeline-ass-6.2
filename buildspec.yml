@@ -14,3 +14,13 @@ artifacts:
   files:
     - target/one-controller.jar
   discard-paths: yes
+
+artifacts:
+  files:
+    - target/one-controller.jar
+  discard-paths: yes
+
+artifacts:
+  type: codepipeline
+  files:
+    - target/one-controller.jar

@@ -13,4 +13,3 @@ phases:
 artifacts:
   files:
     - target/one-controller.jar
-  discard-paths: yes
